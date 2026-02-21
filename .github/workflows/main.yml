@@ -1,4 +1,4 @@
-name: Ultra Obfuscate
+name: Obfuscate worker.js
 
 on:
   push:
@@ -9,13 +9,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
 
-    - run: npm install -g javascript-obfuscator
+    - name: Checkout
+      uses: actions/checkout@v4
 
-    - run: |
-        javascript-obfuscator src \
-        --output dist \
+    - name: Install javascript-obfuscator
+      run: npm install -g javascript-obfuscator
+
+    - name: Obfuscate worker.js
+      run: |
+        mkdir -p dist
+        javascript-obfuscator worker.js \
+        --output dist/worker.js \
         --compact true \
         --control-flow-flattening true \
         --control-flow-flattening-threshold 1 \
