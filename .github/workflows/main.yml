@@ -2,22 +2,18 @@ name: Obfuscate worker.js
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]   # ← اینو تغییر دادیم
 
 jobs:
   obfuscate:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v4
 
-    - name: Checkout
-      uses: actions/checkout@v4
+    - run: npm install -g javascript-obfuscator
 
-    - name: Install javascript-obfuscator
-      run: npm install -g javascript-obfuscator
-
-    - name: Obfuscate worker.js
-      run: |
+    - run: |
         mkdir -p dist
         javascript-obfuscator worker.js \
         --output dist/worker.js \
@@ -26,14 +22,9 @@ jobs:
         --control-flow-flattening-threshold 1 \
         --dead-code-injection true \
         --dead-code-injection-threshold 1 \
-        --debug-protection true \
-        --debug-protection-interval true \
-        --disable-console-output true \
         --identifier-names-generator hexadecimal \
         --rename-globals true \
         --self-defending true \
         --string-array true \
         --string-array-encoding base64 \
-        --string-array-threshold 1 \
-        --transform-object-keys true \
-        --unicode-escape-sequence true
+        --string-array-threshold 1
